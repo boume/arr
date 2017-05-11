@@ -176,7 +176,9 @@ class Base
             return [];
         }
         $arr = $this->channelList($data, 0, '', $fieldPri, $fieldPid);
+        $tmpArr = $arr;
         foreach ($arr as $k => $v) {
+            $nexValue = next($tmpArr);
             $str = "";
             if ($v['_level'] > 2) {
                 for ($i = 1; $i < $v['_level'] - 1; $i++) {
@@ -185,11 +187,16 @@ class Base
             }
             if ($v['_level'] != 1) {
                 $t = $title ? $v[$title] : '';
-                if (isset($arr[$k + 1])
+                /*if (isset($arr[$k + 1])
                     && $arr[$k + 1]['_level'] >= $arr[$k]['_level']
                 ) {
                     $arr[$k]['_'.$title] = $str."├─ ".$v['_html'].$t;
                 } else {
+                    $arr[$k]['_'.$title] = $str."└─ ".$v['_html'].$t;
+                }*/
+                if ($nexValue && $nexValue['_level'] >= $v['_level']) {
+                    $arr[$k]['_'.$title] = $str."├─ ".$v['_html'].$t;
+                }else{
                     $arr[$k]['_'.$title] = $str."└─ ".$v['_html'].$t;
                 }
             } else {
